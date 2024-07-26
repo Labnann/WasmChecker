@@ -82,6 +82,7 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
     commands = file_content.splitlines()
 
     for command in commands:
+        print(f"I'm going to execute {command}")
         if command.startswith("make") and WASM:
             command = "emmake " + command
         print("I'm running " + command)
@@ -98,7 +99,7 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
             check_exit_with_error(error, error_message)
 
     # change to the initial directory
-    os.chdir(curr_dir)
+    # os.chdir(curr_dir)
     return (0, None)
 
 def build_codebase_in_WebAssembly(wasm_branch, test_flag, build_instruction_file, timeout=None):
@@ -111,10 +112,15 @@ def build_codebase_in_WebAssembly(wasm_branch, test_flag, build_instruction_file
                 error, wasm_branch_cmake_lists = get_cmake_lists(wasm_branch)
                 check_exit_with_error(error, wasm_branch_cmake_lists)
                 set_comiple_flag(wasm_branch_cmake_lists, "-s" + flag)
-            elif library.startswith("max-func-params"):
+            elif library.startswith("max-func-params needs to be at least"):
                 error, wasm_branch_cmake_lists = get_cmake_lists(wasm_branch)
                 check_exit_with_error(error, wasm_branch_cmake_lists)
                 disable_comiple_flag(wasm_branch_cmake_lists, "-sEMULATE_FUNCTION_POINTER_CASTS=1")
+            elif library.startswith("--preload-file and --embed-file cannot be used"):
+                error, wasm_branch_cmake_lists = get_cmake_lists(wasm_branch)
+                check_exit_with_error(error, wasm_branch_cmake_lists)
+                print("I'm going to remove --preload-file")
+                disable_comiple_flag(wasm_branch_cmake_lists, "--preload-file")
             else: exit(0)
         else: loop_flag = True
 
@@ -197,5 +203,3 @@ def modify_CTestTestfile(file_path, project_path):
             file_content = file_content.replace(match_str, new_str)
             error, error_message = write_file(file_path, file_content)
             check_exit_with_error(error, error_message)
-
-
