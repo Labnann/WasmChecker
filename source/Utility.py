@@ -25,6 +25,7 @@ def check_exit_with_error(error, error_message):
     else: pass
 
 def find_file(file_name, search_dir):
+    #file_name = file_name.encode().decode('unicode_escape')
     find_command = f'find {search_dir} -name "{file_name}"'
     try: # find the path to a file and return it
         fd = open("file_paths.txt", "w")
@@ -32,7 +33,7 @@ def find_file(file_name, search_dir):
         fd.close()
     except subprocess.CalledProcessError as error:
         error_message = error
-        os.remove("file_paths.txt")
+        #os.remove("file_paths.txt")
         return (1, error_message)
 
     error, file_content = read_file("file_paths.txt")
@@ -40,7 +41,7 @@ def find_file(file_name, search_dir):
 
     files = file_content.splitlines()
     files = [os.path.abspath(file) for file in files]
-    os.remove("file_paths.txt")
+    #os.remove("file_paths.txt")
     return (0, files)
 
 def find_keywords_by_grep(keyword, search_dir):
@@ -51,7 +52,7 @@ def find_keywords_by_grep(keyword, search_dir):
         fd.close()
     except subprocess.CalledProcessError as error:
         error_message = error
-        os.remove("grep_result.txt")
+        #os.remove("grep_result.txt")
         return (0, [])
         return (1, error_message)
 
@@ -60,7 +61,7 @@ def find_keywords_by_grep(keyword, search_dir):
 
     files = file_content.splitlines()
     files = [os.path.abspath(file) for file in files]
-    os.remove("grep_result.txt")
+    #os.remove("grep_result.txt")
     return (0, files)
 
 def get_first_error(error_keyword, file_path):
@@ -84,7 +85,11 @@ def copy_blocking_files_into_correct_path(data_files, destination_paths, search_
         check_exit_with_error(error, files)
 
         for file in files:
-            shutil.copy(file, destination_path)
+            print(file)
+            try: 
+                shutil.copy(file, destination_path)
+            except Exception as error:
+                pass
     print("copy_blocking_files_into_correct_path")
 
 def is_number(s):
@@ -126,7 +131,4 @@ def create_branches(project_dir):
     shutil.copytree(project_dir, x86_branch)
     shutil.copytree(project_dir, wasm_branch)
     shutil.copytree(project_dir, analysis_branch)
-
     return (wasm_branch, x86_branch, analysis_branch)
-
-
