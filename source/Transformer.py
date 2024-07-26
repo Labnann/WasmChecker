@@ -10,6 +10,14 @@ def modify_troublesome_flags(file_path):
     file_content = file_content.replace("-fno-exceptions", "-fexceptions")
     file_content = file_content.replace("-Ofast", "-Oz")
     file_content = file_content.replace("-march", "-mtune")
+    file_content = file_content.replace("-mavx2", "-mavx")
+    file_content = file_content.replace("-mfma", "-mtune=native")
+    file_content = file_content.replace("-mf16c", "-mtune=native")
+    file_content = file_content.replace("-save-temps", "-Wno-error")
+
+    pattern = r'(-msse[0-9]+(?:\.[0-9]+)?)'
+    replacement = r'\1 -msimd128'
+    file_content = re.sub(pattern, replacement, file_content)
 
     error, error_message = write_file(file_path, file_content)
     check_exit_with_error(error, error_message)
@@ -17,13 +25,14 @@ def modify_troublesome_flags(file_path):
 def transform(wasm_branch):
     error, files = find_file("CMakeLists.txt", wasm_branch)
     check_exit_with_error(error, files)
-
+    print("Hey 3")
     for file in files:
         modify_troublesome_flags(file)
-
+        set_comiple_flag(file, "-sSTACK_SIZE=1MB")
+    print("Hey 2")
     error, files = find_keywords_by_grep("Werror", wasm_branch)
     check_exit_with_error(error, files)
-
+    print("Hey 1")
     for file in files:
         modify_troublesome_flags(file)
     print("transform returned successfully!")
@@ -33,8 +42,13 @@ def remove_cmake_option(cmake_file, option, flag):
     error, file_content = read_file(cmake_file)
     check_exit_with_error(error, file_content)
 
-    flag_setting = f'set({option} "${{{option}}} {flag}")'
-    file_content = file_content.replace(flag_setting, "")
+    #flag_setting = f'set({option} "${{{option}}} {flag}")'
+    #file_content = file_content.replace(flag_setting, "")
+    
+    flag_setting = re.compile(rf'set\({option} "\${{{option}}} {flag}[^\n]*"\)')
+    print(flag_setting)
+    file_content = re.sub(flag_setting, "", file_content)
+
     error, error_message = write_file(cmake_file, file_content)
     check_exit_with_error(error, error_message)
 
@@ -79,8 +93,10 @@ def add_necessary_flags(cmake_lists, flags_map):
         set_comiple_flag(cmake_lists, "-sNO_DISABLE_EXCEPTION_CATCHING")
     if flags_map['function-pointer']:
         set_comiple_flag(cmake_lists, "-sEMULATE_FUNCTION_POINTER_CASTS=1")
+    if flags_map['long-double']:
+        set_comiple_flag(cmake_lists, "-sPRINTF_LONG_DOUBLE=1")
 
-    set_comiple_flag(cmake_lists, "-sALLOW_MEMORY_GROWTH -sMEMORY64")
+    set_comiple_flag(cmake_lists, "-sALLOW_MEMORY_GROWTH")
     set_comiple_flag(cmake_lists, "-Wno-unused-command-line-argument")
     set_comiple_flag(cmake_lists, "-sSTACK_SIZE=1MB -Oz -sINITIAL_MEMORY=1GB")
 
@@ -90,5 +106,3 @@ def add_supporting_headers(library):
     if library in result_map.keys():
         return result_map[library]
     else: return "_empty_"
-
-
