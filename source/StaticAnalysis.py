@@ -69,24 +69,31 @@ def run_codeql(branch_dir, query_dir, test_flag):
     return (0, flags_map)
 
 def extract_strings_from_files(branch_dir):
-    file_names = []
+    file_names = []; dir_names = []
     for root, dirs, files in os.walk(branch_dir):
         for file in files:
+            # only extract strings from source or test files
             if file.endswith(('.c', '.cpp', '.h', '.hpp', '.cc', '.tpp', '.t', '.hh', 'tt')):
                 full_path = os.path.join(root, file)
                 file_names.extend(extract_file_paths(full_path))
+                dir_names.extend(extract_dir_paths(full_path))
 
+    # exclude strings representing numbers and headers/sources included.
     files = [fname for fname in file_names if (
-        not fname.endswith(('.c', '.cpp', '.h', '.hpp', '.cc', '.tpp', '.t', '.hh', '.tt')) and not is_number(fname))]
+        not fname.endswith(('.c', '.cpp', '.h', '.hpp', '.cc', '.tpp', '.t', '.hh', '.tt')) 
+        and not is_number(fname))]
     
+    dirs = [dname for dname in dir_names if (not is_number(dname))]
+
     preload_data = set()
     for fname in files:
         postfix = fname.split(os.sep)[-1]
         error, paths = find_file(postfix, branch_dir)
-        #print(f"paths for {postfix} = {paths}")
         check_exit_with_error(error, paths)
         for full_path in paths:
             preload_str = full_path + "@" + fname
+            preload_data.add(preload_str)
+            preload_str = full_path + "@" + full_path
             preload_data.add(preload_str)
 
     grouped_paths = classify_paths(files)
@@ -100,6 +107,18 @@ def extract_strings_from_files(branch_dir):
             for full_path in paths:
                 preload_str = full_path + "@" + prefix
                 preload_data.add(preload_str)
+                preload_str = full_path + "@" + full_path
+                preload_data.add(preload_str)
+    
+    for _dir in dirs:
+        postfix = _dir.strip(os.sep).split(os.sep)[-1]
+        if postfix == '': pass
+        error, paths = find_file(postfix, branch_dir)
+        check_exit_with_error(error, paths)
+        for full_path in paths:
+            preload_str = full_path + "@" + postfix
+            preload_data.add(preload_str)
+
     return preload_data
 
 def get_query_files(directory):
@@ -108,11 +127,24 @@ def get_query_files(directory):
     return files
 
 def extract_file_paths(file_path):
-    file_path_regex = r'"([a-zA-Z0-9_./\\:-]+\.[a-zA-Z0-9]+)"'
+    file_path_regex = r'"([a-zA-Z0-9_./\\-]+\.[a-zA-Z0-9]+)"'
     try: # read from a file and return the content
         file = open(file_path, 'r', encoding='utf-8', errors='ignore')
         content = file.read()
         matches = re.findall(file_path_regex, content)
+        file.close()
+        if matches: return matches
+        else: return []
+    except Exception as error:
+        print(f"error: could not read {file_path}!")
+    return []
+
+def extract_dir_paths(file_path):
+    dir_path_regex = r'"([a-zA-Z0-9_/-]+)"'
+    try: # read from a file and return the content
+        file = open(file_path, 'r', encoding='utf-8', errors='ignore')
+        content = file.read()
+        matches = re.findall(dir_path_regex, content)
         file.close()
         if matches: return matches
         else: return []
