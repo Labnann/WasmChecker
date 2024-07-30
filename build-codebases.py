@@ -6,11 +6,9 @@ import shutil
 import subprocess
 
 def copy_and_build(csv_file, destination_path):
-    # Read the CSV file into a DataFrame
     df = pd.read_csv(csv_file, header=None)
     df.columns = ['project','test-flag'] 
     curr_dir = os.getcwd()
-    # Iterate through each project name in the 'project' column
     for index, row in df.iterrows():
         url = row['project']
         flag = row['test-flag']
@@ -28,7 +26,7 @@ def copy_and_build(csv_file, destination_path):
             print(f"Project {project} copied to {dest_dir}.")
         else:
             print(f"Source directory for {project} does not exist.")
-            try: # Clone the repository of the given url
+            try: # clone the repository of the given url
                 clone_command = f"git clone --recursive {url} {dest_dir}"
                 subprocess.run(clone_command, shell=True, check=True,
                 stderr=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -56,13 +54,13 @@ def copy_and_build(csv_file, destination_path):
         if compiler == "emcc":
             config_command = ['emcmake', 'cmake', testing, '..']
             build_command = ['emmake', 'cmake', '--build', '.', '-j']
-        try: # Configure the project using emcmake cmake
+        try: # configure the project using emcmake cmake
             subprocess.run(config_command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             print(f"Configuration of {project} completed.")
         except subprocess.CalledProcessError as e:
             error = True
             print(f"Configuration failed for {project}: {e}")
-        try: # Build the project
+        try: # build the project
             subprocess.run(build_command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             print(f"Build completed for {project}.")
         except subprocess.CalledProcessError as e:
@@ -73,8 +71,6 @@ def copy_and_build(csv_file, destination_path):
         else:
             print(f"[bold green]Building project {project} in WebAssembly is done![/bold green]")
         os.chdir(curr_dir)
-
-compiler = None
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
