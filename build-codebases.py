@@ -6,11 +6,9 @@ import shutil
 import subprocess
 
 def copy_and_build(csv_file, destination_path):
-
     # Read the CSV file into a DataFrame
     df = pd.read_csv(csv_file, header=None)
-    df.columns = ['project','test-flag']
-    #df = df[82:] 
+    df.columns = ['project','test-flag'] 
     curr_dir = os.getcwd()
     # Iterate through each project name in the 'project' column
     for index, row in df.iterrows():
@@ -18,16 +16,13 @@ def copy_and_build(csv_file, destination_path):
         flag = row['test-flag']
         project = url.split('/')[-1]
         print(f"I'm going to build project {project} in WebAssembly")
-        
-        # Define the source and destination directories
+        # define the source and destination directories
         source_dir = os.path.join('./codebases', project)
         dest_dir = os.path.join(destination_path, project)
-        
         if os.path.exists(dest_dir):
             print(f"Project {project} exists!")
             continue
-        
-        # Copy the directory from source to destination
+        # copy the directory from source to destination
         if os.path.exists(source_dir):
             shutil.copytree(source_dir, dest_dir)
             print(f"Project {project} copied to {dest_dir}.")
@@ -38,50 +33,41 @@ def copy_and_build(csv_file, destination_path):
                 subprocess.run(clone_command, shell=True, check=True,
                 stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 print("Cloning is done!")
-            except subprocess.CalledProcessError as error:
-                continue
+            except subprocess.CalledProcessError as error: continue
 
-        # Create a build diriectory and change to it
+        # create a build diriectory and change to it
         build_dir = os.path.join(dest_dir, 'build')
-        
         os.makedirs(build_dir, exist_ok=True)
         os.chdir(build_dir)
-        
         c_compiler = "-DCMAKE_C_COMPILER="
         cpp_compiler = "-DCMAKE_CXX_COMPILER="
 
         if compiler == "gcc":
             c_compiler = c_compiler + "/usr/bin/gcc"
             cpp_compiler = cpp_compiler + "/usr/bin/g++"
-        
         if compiler == "clang":
             c_compiler = c_compiler + "/usr/bin/clang"
             cpp_compiler = cpp_compiler + "/usr/bin/clang++"
-
         error = False
         testing = f"-D{flag}=ON"
-
         if compiler == "gcc" or compiler == "clang":
             config_command = ['cmake', testing, c_compiler, cpp_compiler, '..']
             build_command = ['cmake', '--build', '.', '-j']
         if compiler == "emcc":
             config_command = ['emcmake', 'cmake', testing, '..']
             build_command = ['emmake', 'cmake', '--build', '.', '-j']
-
         try: # Configure the project using emcmake cmake
             subprocess.run(config_command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             print(f"Configuration of {project} completed.")
         except subprocess.CalledProcessError as e:
             error = True
             print(f"Configuration failed for {project}: {e}")
-
         try: # Build the project
             subprocess.run(build_command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             print(f"Build completed for {project}.")
         except subprocess.CalledProcessError as e:
             error = True
             print(f"Build failed for {project}: {e}")
-        
         if error: 
             print(f"[bold red]Building project {project} in WebAssembly failed![/bold red]")
         else:
@@ -91,16 +77,13 @@ def copy_and_build(csv_file, destination_path):
 compiler = None
 
 if __name__ == "__main__":
-
     if len(sys.argv) != 2:
         print("Usage: python3 build-codebases.py clang/gcc/emcc")
         sys.exit(1)
-
     compiler = sys.argv[1]
     if compiler != "clang" and compiler == "gcc" and compiler == "emcc":
         print("[bold red]Unknown Compiler![/bold red]")
         exit(0)
-
     csv_file_path = 'codebases.csv'
-    destination_path = compiler + '-builds'  # Define your destination path here
+    destination_path = compiler + '-builds'  # define your destination path here
     copy_and_build(csv_file_path, destination_path)
