@@ -13,7 +13,7 @@ $ source ./emsdk_env.sh
 Note: We did the evaluation part using Emscripten version 3.1.54. However, WasmChecker can work with any arbitrary version. 
 
 ## How to Use WasmChecker
-You can use WasmChecker in two ways. If you are going to test a codebase that is already in your system, simply use the foolowing command:
+You can use WasmChecker in two ways. If you are going to test a codebase that is already in your system, simply use the following command:
 ```
 python3 WasmChecker.py -p path_to_codebase -t test_flag
 ```
