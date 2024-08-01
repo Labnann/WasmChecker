@@ -15,7 +15,7 @@ import time
 from rich import print
 import difflib
 import validators
-from source import FileHandler
+from source.FileHandler import *
 
 def check_exit_with_error(error, error_message):
     if error:
