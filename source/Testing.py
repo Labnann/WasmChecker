@@ -11,7 +11,7 @@ def run_tests(WASM=False):
         fd1.close()
         fd2.close()
     except subprocess.CalledProcessError as error:
-        print(f"testing error: {error}")
+        # print(f"testing error: {error}")
         matched_error_line = get_first_error("Output from these tests are in:", "command.txt")
         if matched_error_line != "_empty_": return (1, matched_error_line)
         matched_error_line = get_first_error("No rule to make target 'test'.", "command.txt")
