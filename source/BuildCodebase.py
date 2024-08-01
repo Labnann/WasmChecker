@@ -20,7 +20,7 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
         fd.close()
     except subprocess.CalledProcessError as error:
         log_file = cmake_log
-        print(f"cmake error: {error}")
+        print(f"build error: {error}")
         matched_error_line = get_first_error("Could NOT find", "command.txt")
         library = matched_error_line.split(' ')[0].upper()
         print("could not find ", library)
@@ -28,7 +28,7 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
         log_text = "Error: " + matched_error_line + " happend when running " + cmake_command
         error, error_message = modify_file(log_file, log_text)
         check_exit_with_error(error, error_message)
-        print("running cmake failed!***")
+        # print("running cmake failed!***")
         return (1, library)
 
     if WASM:
@@ -50,11 +50,11 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
         matched_error_line = get_first_error("Fatal:", "command.txt")
         if matched_error_line == "_empty_":
             matched_error_line = get_first_error("error:", "command.txt")
-        print(matched_error_line)
+        # print(matched_error_line)
         log_text = "Error: " + matched_error_line + " happend when running " + make_command
         error, error_message = modify_file(log_file, log_text)
         check_exit_with_error(error, error_message)
-        print("running make failed!***")
+        # print("running make failed!***")
         return (1, matched_error_line)
 
     make_command = "make check"
@@ -68,11 +68,11 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
         log_file = build_log
         print(f"build error: {error}")
         matched_error_line = get_first_error("error:", "command.txt")
-        print(matched_error_line)
+        # print(matched_error_line)
         log_text = "Error: " + matched_error_line + " happend when running " + make_command
         error, error_message = modify_file(log_file, log_text)
         check_exit_with_error(error, error_message)
-        print("running make check failed!***")
+        # print("running make check failed!***")
 
     if build_instruction_file == None: return (0, None)
 
@@ -82,10 +82,10 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
     commands = file_content.splitlines()
 
     for command in commands:
-        print(f"I'm going to execute {command}")
+        # print(f"I'm going to execute {command}")
         if command.startswith("make") and WASM:
             command = "emmake " + command
-        print("I'm running " + command)
+        # print("I'm running " + command)
         try: # run additional commands to completely build the project and tests
             fd = open("command.txt", "w")
             subprocess.run(command, shell=True, check=True, stderr=fd, stdout=subprocess.PIPE)
@@ -119,7 +119,7 @@ def build_codebase_in_WebAssembly(wasm_branch, test_flag, build_instruction_file
             elif library.startswith("--preload-file and --embed-file cannot be used"):
                 error, wasm_branch_cmake_lists = get_cmake_lists(wasm_branch)
                 check_exit_with_error(error, wasm_branch_cmake_lists)
-                print("I'm going to remove --preload-file")
+                # print("I'm going to remove --preload-file")
                 disable_comiple_flag(wasm_branch_cmake_lists, "--preload-file")
             else: exit(0)
         else: loop_flag = True
@@ -134,7 +134,7 @@ def build_codebase_in_WebAssembly(wasm_branch, test_flag, build_instruction_file
         make_file = wasm_branch + os.sep + "build" + os.sep + "Makefile"
         error, error_message = set_test_timeout(timeout, make_file)
         #check_exit_with_error(error, error_message)
-    print("build_codebase_in_WebAssembly returned successfully!")
+    # print("build_codebase_in_WebAssembly returned successfully!")
 
 def modify_CTestTestfile(file_path, project_path):
     pattern = r"add_test\(\s*(.*)\s*\)"
