@@ -66,7 +66,7 @@ def build_project(project_dir, test_flag, build_instruction_file=None, WASM=Fals
         fd.close()
     except subprocess.CalledProcessError as error:
         log_file = build_log
-        print(f"build error: {error}")
+        # print(f"build error: {error}")
         matched_error_line = get_first_error("error:", "command.txt")
         # print(matched_error_line)
         log_text = "Error: " + matched_error_line + " happend when running " + make_command
