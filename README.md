@@ -41,6 +41,10 @@ You can also simply provide WasmChecker with the git url using the following com
 ```
 python3 WasmChecker.py -u repo_url -t test_flag
 ```
+For example:
+```
+python3 WasmChecker.py -u https://github.com/fmtlib/fmt -t FMT_TEST
+```
 
 ## Build and Test Codebases with the Default Settings of Emscripten
 
