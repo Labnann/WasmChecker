@@ -1,5 +1,5 @@
-from Config import*
-from Utility import*
+from source import Config
+from source import Utility
 
 def run_tests(WASM=False):
     test_command = "make test"
