@@ -1,7 +1,7 @@
-from source import Testing
-from source import Transformer
-from source import Config
-from source import Utility
+from source.Testing import *
+from source.Transformer import *
+from source.Config import *
+from source.Utility import *
 
 def build_project(project_dir, test_flag, build_instruction_file=None, WASM=False):    
     curr_dir = os.getcwd()
