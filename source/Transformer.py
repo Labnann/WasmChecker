@@ -36,7 +36,7 @@ def transform(wasm_branch):
     
     for file in files:
         modify_troublesome_flags(file)
-    print("transform returned successfully!")
+    # print("transform returned successfully!")
 
 def remove_cmake_option(cmake_file, option, flag):
     # remove flags and compiler options
@@ -47,7 +47,7 @@ def remove_cmake_option(cmake_file, option, flag):
     #file_content = file_content.replace(flag_setting, "")
     
     flag_setting = re.compile(rf'set\({option} "\${{{option}}} {flag}[^\n]*"\)')
-    print(flag_setting)
+    # print(flag_setting)
     file_content = re.sub(flag_setting, "", file_content)
 
     error, error_message = write_file(cmake_file, file_content)
