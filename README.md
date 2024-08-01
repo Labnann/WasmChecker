@@ -12,6 +12,15 @@ $ source ./emsdk_env.sh
 ```
 Note: We did the evaluation part using Emscripten version 3.1.54. However, WasmChecker can work with any arbitrary version. 
 
+## Download and Install CodeQL
+```
+$ wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.17.0/codeql-bundle-linux64.tar.gz
+$ tar -xzf codeql-bundle-linux64.tar.gz 
+$ export PATH=$PATH:/path/to/codeql
+$ codeql resolve qlpacks
+```
+Note: We did the evaluation part using Emscripten version 3.1.54. However, WasmChecker can work with any arbitrary version. 
+
 ## How to Use WasmChecker
 You can use WasmChecker in two ways. If you are going to test a codebase that is already in your system, simply use the following command:
 ```
