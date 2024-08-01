@@ -14,6 +14,7 @@ $ git pull
 $ ./emsdk install 3.1.54
 $ ./emsdk activate 3.1.54
 $ source ./emsdk_env.sh
+$ cd ..
 ```
 Note: We did the evaluation part using Emscripten version 3.1.54. However, WasmChecker can work with any arbitrary version. 
 
