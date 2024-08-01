@@ -85,12 +85,12 @@ def copy_blocking_files_into_correct_path(data_files, destination_paths, search_
         check_exit_with_error(error, files)
 
         for file in files:
-            print(file)
+            # print(file)
             try: 
                 shutil.copy(file, destination_path)
             except Exception as error:
                 pass
-    print("copy_blocking_files_into_correct_path")
+    # print("copy_blocking_files_into_correct_path")
 
 def is_number(s):
     try: float(s); return True
