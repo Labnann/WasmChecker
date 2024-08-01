@@ -1,5 +1,5 @@
-from Config import*
-from Utility import*
+from source import Config
+from source import Utility
 
 def run_codeql(branch_dir, query_dir, test_flag):
     curr_dir = os.getcwd()
