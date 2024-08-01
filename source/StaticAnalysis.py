@@ -14,12 +14,12 @@ def run_codeql(branch_dir, query_dir, test_flag):
         fd.close()
     except subprocess.CalledProcessError as error:
         log_file = cmake_log
-        print(f"cmake error: {error}")
+        print(f"build error: {error}")
         matched_error_line = get_first_error("error", "command.txt")
         log_text = "Error: " + matched_error_line + " happend when running " + cmake_command
         error, error_message = modify_file(log_file, log_text)
         check_exit_with_error(error, error_message)
-        print("running cmake failed!***")
+        # print("running cmake failed!***")
         return (1, matched_error_line)
 
     create_database_command = "codeql database create qldb --language=c-cpp --source-root . --command=make"
@@ -32,14 +32,14 @@ def run_codeql(branch_dir, query_dir, test_flag):
         log_file = build_log
         print(f"build error: {error}")
         matched_error_line = get_first_error("error:", "command.txt")
-        print(matched_error_line)
+        # print(matched_error_line)
         log_text = "Error: " + matched_error_line + " happend when running " + create_database_command
         error, error_message = modify_file(log_file, log_text)
         check_exit_with_error(error, error_message)
         return (1, matched_error_line)
 
     os.makedirs("qlcsv", exist_ok=True)
-    print("I'm going to run codeQL queries!")
+    # print("I'm going to run codeQL queries!")
     query_files = get_query_files(query_dir)
     flags_map = {}
     for query in query_files:
