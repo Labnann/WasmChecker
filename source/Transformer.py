@@ -1,5 +1,5 @@
-from source import Config
-from source import Utility
+from source.Config import *
+from source.Utility import *
 
 def modify_troublesome_flags(file_path):
     error, file_content = read_file(file_path)
