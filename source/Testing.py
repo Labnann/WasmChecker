@@ -73,7 +73,7 @@ def check_tests(file_path):
     if len(matched) == 0:
         exe_pattern = r"add_executable\(((.|\n)*?)\)"
         exe_matched = re.findall(f"({exe_pattern})", file_content)
-        print("** NO TEST For EXECUTABLE **")
+        # print("** NO TEST For EXECUTABLE **")
         new_file_content = file_content
         for executable_body in exe_matched:
             executable_file = executable_body[1].split()[0]
@@ -82,7 +82,7 @@ def check_tests(file_path):
                     executable_body[0] + os.linesep + add_test)
             error, error_message = write_file(file_path, new_file_content)
             check_exit_with_error(error, error_message)
-    print("check tests returned successfully!")
+    # print("check tests returned successfully!")
 
 def find_blocking_tests(log_file):    
     error, file_content = read_file(log_file)
@@ -125,7 +125,7 @@ def add_test_for_executables(branch_dir):
 
     for file in files:
         check_tests(file)
-    print("add_test_for_executables returned successfully!")
+    # print("add_test_for_executables returned successfully!")
 
 def extract_failed_tests(text):
     lines = text.split('\n')
