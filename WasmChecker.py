@@ -182,5 +182,5 @@ if __name__ == "__main__":
         # get differential results
         diff = differentiate(wasm_failed_tests, x86_filed_tests)
         num = len(diff)
-        print(f"[bold blue] Tests with Different Results {num} [/bold blue]")
+        print(f"[bold blue]Tests with Different Results {num} [/bold blue]")
         print(diff)
