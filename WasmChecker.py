@@ -1,8 +1,8 @@
-from Utility import*
-from Testing import*
-from StaticAnalysis import*
-from Transformer import*
-from BuildCodebase import*
+from source import Utility
+from source import StaticAnalysis
+from source import Transformer
+from source import BuildCodebase
+from source import Testing
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
