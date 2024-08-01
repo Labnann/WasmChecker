@@ -3,6 +3,7 @@ from source import StaticAnalysis
 from source import Transformer
 from source import BuildCodebase
 from source import Testing
+import argparse
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
