@@ -1,9 +1,8 @@
-from source import Utility
-from source import StaticAnalysis
-from source import Transformer
-from source import BuildCodebase
-from source import Testing
-import argparse
+from source.Utility import *
+from source.StaticAnalysis import *
+from source.Transformer import *
+from source.BuildCodebase import *
+from source.Testing import *
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
