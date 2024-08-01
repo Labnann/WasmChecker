@@ -113,12 +113,12 @@ if __name__ == "__main__":
                     filtered = data_frame[data_frame["output"].str.contains("Error: ENOENT", case=False, na=False)]
                     if filtered.empty: # check if the log file has any problem regarding input files access
                         loop_flag = True
-                        print("I made flag true and there is at least one failing test case!")
+                        # print("I made flag true and there is at least one failing test case!")
                     else: # it needs to copy the input files in the correct path where tests are getting executed
                         filtered["file_name"] = filtered["output"].str.extract(pattern, expand=False)
                         if filtered["file_name"].tolist() == previous_list:
                             loop_flag = True
-                            print("I made flag true and there is at least one failing test case!")
+                            # print("I made flag true and there is at least one failing test case!")
                         else: # it needs to copy the input files in the correct path where tests are getting executed
                             copy_blocking_files_into_correct_path(
                                     filtered["file_name"].tolist(), filtered["directory"].tolist(), wasm_branch)
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                     enable_testing(wasm_branch_cmake_lists, test_flag)
                     enable_testing(x86_branch_cmake_lists, test_flag)
                     build_codebase_in_WebAssembly(wasm_branch, test_flag, build_instruction_file, timeout)
-                    print("I enabled testing option and built the codebase again")
+                    # print("I enabled testing option and built the codebase again")
             else: # no error happened when running tests
                 error, file_content = read_file("command.txt")
                 check_exit_with_error(error, file_content)
@@ -137,7 +137,7 @@ if __name__ == "__main__":
                     add_test_for_executables(wasm_branch)
                     add_test_for_executables(x86_branch)
                     build_codebase_in_WebAssembly(wasm_branch, test_flag, build_instruction_file, timeout)
-                    print("I added tests and built the codebase again")
+                    # print("I added tests and built the codebase again")
                 else: # tests passed successfully
                     log_file = "Testing/Temporary/LastTest.log"
                     error, file_content = read_file(log_file)
@@ -147,7 +147,7 @@ if __name__ == "__main__":
                     filtered = data_frame[data_frame["output"].str.contains("Error: ENOENT", case=False, na=False)]
                     if filtered.empty: # check if the log file has any problem regarding input files access
                         loop_flag = True
-                        print("I made flag true since all the tests passed and everything is done!")
+                        # print("I made flag true since all the tests passed and everything is done!")
                     else: # it needs to copy the input files in the correct path where tests are getting executed
                         filtered["file_name"] = filtered["output"].str.extract(pattern, expand=False)
                         copy_blocking_files_into_correct_path(
@@ -174,9 +174,10 @@ if __name__ == "__main__":
         # extract failed tests for each binary
         wasm_failed_tests = extract_failed_tests(wasm_test_result)
         x86_filed_tests = extract_failed_tests(x86_test_result)
-        
-        print(wasm_test_result)
-        print(x86_test_result)
+
+        # uncomment to see the detailed results
+        # print(wasm_test_result)
+        # print(x86_test_result)
         
         # get differential results
         diff = differentiate(wasm_failed_tests, x86_filed_tests)
