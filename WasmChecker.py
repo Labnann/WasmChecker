@@ -62,8 +62,7 @@ if __name__ == "__main__":
         print("[bold magenta]Analyzing Codebase[/bold magenta]")
 
         # run predefined CodeQL queries to extract code construcsts
-        error, flags_map = run_codeql(analysis_branch, 
-                "/home/sara/WasmChecker/TESTFILE/queries", test_flag)
+        error, flags_map = run_codeql(analysis_branch, queries_path, test_flag)
 
         if error: # set default settings if CodeQL cannot analyze the codebase
             flags_map = {}
