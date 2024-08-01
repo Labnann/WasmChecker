@@ -3,6 +3,7 @@ from Utility import*
 
 def modify_troublesome_flags(file_path):
     error, file_content = read_file(file_path)
+    if error: return
     check_exit_with_error(error, file_content)
 
     file_content = file_content.replace("-fstack-protector", "-fno-stack-protector")
@@ -25,14 +26,14 @@ def modify_troublesome_flags(file_path):
 def transform(wasm_branch):
     error, files = find_file("CMakeLists.txt", wasm_branch)
     check_exit_with_error(error, files)
-    print("Hey 3")
+    
     for file in files:
         modify_troublesome_flags(file)
         set_comiple_flag(file, "-sSTACK_SIZE=1MB")
-    print("Hey 2")
+    
     error, files = find_keywords_by_grep("Werror", wasm_branch)
     check_exit_with_error(error, files)
-    print("Hey 1")
+    
     for file in files:
         modify_troublesome_flags(file)
     print("transform returned successfully!")
