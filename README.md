@@ -1,6 +1,11 @@
 # WasmChecker
 A differential testing framework comparing semantics equivalency of a C/C++ code in a native binary (e.g., x86-64) and WebAssembly using a test-driven approach
 
+## Requirements
+- Python3
+- [Emscripten compiler toolchain](https://emscripten.org)
+- [CodeqL analysis engine](https://codeql.github.com)
+
 ## Download and Install Emscripten
 ```
 $ git clone https://github.com/emscripten-core/emsdk.git
