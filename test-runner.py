@@ -88,7 +88,7 @@ def run_tests(WASM=False):
         fd1.close()
         fd2.close()
     except subprocess.CalledProcessError as error:
-        # print(f"testing error: {error}")
+        #print(f"testing error: {error}")
         matched_error_line = get_first_error("Output from these tests are in:", "command.txt")
         if matched_error_line != "_empty_": return (1, matched_error_line)
         matched_error_line = get_first_error("No rule to make target 'test'.", "command.txt")
@@ -217,7 +217,7 @@ def build_project(project_dir, WASM=False):
         subprocess.run(make_command, shell=True, check=True, stderr=fd, stdout=subprocess.PIPE)
         fd.close()
     except subprocess.CalledProcessError as error:
-        print("running make check failed!***")
+        #print("running make check failed!***")
         #return (1, matched_error_line)
     
     os.chdir(curr_dir)
@@ -271,6 +271,9 @@ def check_tests(file_path):
                     executable_body[0] + os.linesep + add_test)
             error, error_message = write_file(file_path, new_file_content)
             check_exit_with_error(error, error_message)
+
+    for match_str in matched:
+        print("match_str = ", match_str)
 
 def enable_testing(file_path, test_flag):
     
@@ -395,6 +398,10 @@ def extract_failure_line(text):
     # Search for the pattern in the given text
     match = re.search(pattern, text)
     # If a match is found, print the matching string
+    if match:
+        print(match.group())
+    else:
+        print("No matching line found.")
 
 def copy_blocking_files_into_correct_path(data_files, destination_paths, search_dir):
 
