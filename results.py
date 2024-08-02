@@ -21,7 +21,7 @@ def extract_y_value(string):
     return int(match.group(1)) if match else None
 
 # read the dataset of open-source projects collected from GitHub
-df = pd.read_csv('/Users/sara/Downloads/Dataset - Sheet2-20.csv')
+df = pd.read_csv('dataset.csv')
 N = 60
 
 print("=" * ((N - len("Total Number of Codebases"))//2), f"{red_text}Total Number of Codebases {reset_text}", "=" * ((N - len("Total Number of Codebases"))//2))
