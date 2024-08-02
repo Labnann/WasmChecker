@@ -88,7 +88,7 @@ def run_tests(WASM=False):
         fd1.close()
         fd2.close()
     except subprocess.CalledProcessError as error:
-        #print(f"testing error: {error}")
+        print(f"testing error: {error}")
         matched_error_line = get_first_error("Output from these tests are in:", "command.txt")
         if matched_error_line != "_empty_": return (1, matched_error_line)
         matched_error_line = get_first_error("No rule to make target 'test'.", "command.txt")
@@ -202,11 +202,11 @@ def build_project(project_dir, WASM=False):
         matched_error_line = get_first_error("Fatal:", "command.txt")
         if matched_error_line == "_empty_":
             matched_error_line = get_first_error("error:", "command.txt")
-        #print(matched_error_line)
+        print(matched_error_line)
         log_text = "Error: " + matched_error_line + " happend when running " + make_command
         error, error_message = modify_file(log_file, log_text)
         check_exit_with_error(error, error_message)
-        #print("running make failed!***")
+        print("running make failed!***")
         return (1, matched_error_line)
 
     make_command = "make check"
@@ -217,6 +217,7 @@ def build_project(project_dir, WASM=False):
         subprocess.run(make_command, shell=True, check=True, stderr=fd, stdout=subprocess.PIPE)
         fd.close()
     except subprocess.CalledProcessError as error:
+        pass
         #print("running make check failed!***")
         #return (1, matched_error_line)
     
@@ -226,7 +227,7 @@ def build_project(project_dir, WASM=False):
 def find_file(file_name, search_dir):
 
     find_command = f'find {search_dir} -name "{file_name}"'
-    #print(find_command)
+    print(find_command)
     try: # find the path to a file and return it
         fd = open("file_paths.txt", "w")
         subprocess.run(find_command, shell=True, check=True, stdout=fd, stderr=subprocess.PIPE)
@@ -257,10 +258,10 @@ def check_tests(file_path):
     if len(matched) == 0:
         exe_pattern = r"add_executable\(((.|\n)*?)\)"
         exe_matched = re.findall(f"({exe_pattern})", file_content)
-        #print("** NO TEST For EXECUTABLE **")
+        print("** NO TEST For EXECUTABLE **")
         new_file_content = file_content
         for executable_body in exe_matched:
-            #print(executable_body)
+            print(executable_body)
             executable_file = executable_body[1].split()[0]
             #print("executable_file = ", executable_file)
             add_test = f"add_test(NAME {executable_file} COMMAND {executable_file})"
@@ -341,7 +342,7 @@ def build_codebase_in_WebAssembly(wasm_branch, timeout=None):
         make_file = wasm_branch + os.sep + "build" + os.sep + "Makefile"
         error, error_message = set_test_timeout(timeout, make_file)
         #check_exit_with_error(error, error_message)
-    #print("build_codebase_in_WebAssembly returned successfully!")
+    print("build_codebase_in_WebAssembly returned successfully!")
 
 def check_test_availability(file_content):
  
@@ -353,12 +354,13 @@ def check_test_availability(file_content):
     else: return (0, None)
 
 def add_test_for_executables(branch_dir):
-    #print(os.getcwd())
+    print(os.getcwd())
     error, files = find_file("CMakeLists.txt", branch_dir)
     check_exit_with_error(error, files)
+    print("akshdjahda")
     for file in files:
         check_tests(file)
-    #print("add_test_for_executables returned successfully!")
+    print("add_test_for_executables returned successfully!")
 
 def is_number(s):
 
@@ -413,7 +415,7 @@ def copy_blocking_files_into_correct_path(data_files, destination_paths, search_
         
         for file in files:
             shutil.copy(file, destination_path)
-            #print("I'm copying ", file, " into ", destination_path)
+            print("I'm copying ", file, " into ", destination_path)
 
 def get_cmake_lists(branch_dir):
     cmake_lists = branch_dir + os.sep + "CMakeLists.txt"
@@ -472,11 +474,11 @@ if __name__ == "__main__":
                         filtered["file_name"] = filtered["output"].str.extract(pattern, expand=False)
                         copy_blocking_files_into_correct_path(filtered["file_name"].tolist(), filtered["directory"].tolist(), project_dir)
                         loop_flag = False
-                        #print("I made flag true since tests are available and some tests failed")
+                        print("I made flag true since tests are available and some tests failed")
                 else: # no target for test, should enable testing
                     enable_testing(wasm_branch_cmake_lists, test_flag)
                     build_codebase_in_WebAssembly(wasm_branch, timeout)
-                    #print("I enabled testing option and built the codebase again")
+                    print("I enabled testing option and built the codebase again")
             else: # no error happened when running tests
                 error, file_content = read_file("command.txt")
                 check_exit_with_error(error, file_content)
@@ -484,8 +486,9 @@ if __name__ == "__main__":
                 if error == 1: # tests are not available, need to be added
                     add_test_for_executables(wasm_branch)
                     build_codebase_in_WebAssembly(wasm_branch, timeout)
-                    #print("I added tests and built the codebase again")
+                    print("I added tests and built the codebase again")
                 else:
+                    print("Here")
                     log_file = "Testing/Temporary/LastTest.log"
                     error, file_content = read_file(log_file)
                     check_exit_with_error(error, file_content)
@@ -494,12 +497,12 @@ if __name__ == "__main__":
                     filtered = data_frame[data_frame["output"].str.contains("Error: ENOENT", case=False, na=False)]
                     if filtered.empty:
                         loop_flag = True
-                        #print("I made flag true since all the tests passed and everything is done!")
+                        print("I made flag true since all the tests passed and everything is done!")
                     else:
                         filtered["file_name"] = filtered["output"].str.extract(pattern, expand=False)
                         copy_blocking_files_into_correct_path(filtered["file_name"].tolist(), filtered["directory"].tolist(), wasm_branch)
                         loop_flag = False
-                    #print("I made flag true since all the tests passed and everything is done!")
+                    # print("I made flag true since all the tests passed and everything is done!")
         error, wasm_test_result = read_file("test_command.txt")
         check_exit_with_error(error, wasm_test_result)
         extract_failure_line(wasm_test_result)
