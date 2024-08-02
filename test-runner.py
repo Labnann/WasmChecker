@@ -273,8 +273,8 @@ def check_tests(file_path):
             error, error_message = write_file(file_path, new_file_content)
             check_exit_with_error(error, error_message)
 
-    for match_str in matched:
-        print("match_str = ", match_str)
+    #for match_str in matched:
+        #print("match_str = ", match_str)
 
 def enable_testing(file_path, test_flag):
     
@@ -398,10 +398,8 @@ def extract_failure_line(text):
     # Search for the pattern in the given text
     match = re.search(pattern, text)
     # If a match is found, print the matching string
-    if match:
-        print(match.group())
-    else:
-        print("No matching line found.")
+    if match: print(match.group())
+    else: print("No matching line found.")
 
 def copy_blocking_files_into_correct_path(data_files, destination_paths, search_dir):
 
@@ -413,7 +411,7 @@ def copy_blocking_files_into_correct_path(data_files, destination_paths, search_
         
         for file in files:
             shutil.copy(file, destination_path)
-            print("I'm copying ", file, " into ", destination_path)
+            #print("I'm copying ", file, " into ", destination_path)
 
 def get_cmake_lists(branch_dir):
     cmake_lists = branch_dir + os.sep + "CMakeLists.txt"
@@ -472,11 +470,11 @@ if __name__ == "__main__":
                         filtered["file_name"] = filtered["output"].str.extract(pattern, expand=False)
                         copy_blocking_files_into_correct_path(filtered["file_name"].tolist(), filtered["directory"].tolist(), project_dir)
                         loop_flag = False
-                        print("I made flag true since tests are available and some tests failed")
+                        #print("I made flag true since tests are available and some tests failed")
                 else: # no target for test, should enable testing
                     enable_testing(wasm_branch_cmake_lists, test_flag)
                     build_codebase_in_WebAssembly(wasm_branch, timeout)
-                    print("I enabled testing option and built the codebase again")
+                    #print("I enabled testing option and built the codebase again")
             else: # no error happened when running tests
                 error, file_content = read_file("command.txt")
                 check_exit_with_error(error, file_content)
@@ -484,7 +482,7 @@ if __name__ == "__main__":
                 if error == 1: # tests are not available, need to be added
                     add_test_for_executables(wasm_branch)
                     build_codebase_in_WebAssembly(wasm_branch, timeout)
-                    print("I added tests and built the codebase again")
+                    #print("I added tests and built the codebase again")
                 else:
                     log_file = "Testing/Temporary/LastTest.log"
                     error, file_content = read_file(log_file)
@@ -494,12 +492,12 @@ if __name__ == "__main__":
                     filtered = data_frame[data_frame["output"].str.contains("Error: ENOENT", case=False, na=False)]
                     if filtered.empty:
                         loop_flag = True
-                        print("I made flag true since all the tests passed and everything is done!")
+                        #print("I made flag true since all the tests passed and everything is done!")
                     else:
                         filtered["file_name"] = filtered["output"].str.extract(pattern, expand=False)
                         copy_blocking_files_into_correct_path(filtered["file_name"].tolist(), filtered["directory"].tolist(), wasm_branch)
                         loop_flag = False
-                    # print("I made flag true since all the tests passed and everything is done!")
+                    #print("I made flag true since all the tests passed and everything is done!")
         error, wasm_test_result = read_file("test_command.txt")
         check_exit_with_error(error, wasm_test_result)
         extract_failure_line(wasm_test_result)
