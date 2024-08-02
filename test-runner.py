@@ -444,7 +444,7 @@ if __name__ == "__main__":
     if args.test: test_flag = args.test
     else: test_flag = None
 
-    with alive_bar(5, title='Processing', length=20, bar='blocks', spinner='twirls') as bar:
+    with alive_bar(2, title='Processing', length=20, bar='blocks', spinner='twirls') as bar:
         
         project_dir = os.path.abspath(args.path)
         wasm_branch = project_dir
