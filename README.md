@@ -50,9 +50,4 @@ python3 WasmChecker.py -u https://github.com/fmtlib/fmt -t FMT_TEST
 
 ```python3 build-codebases.py compiler(i.e., clang/gcc/emcc)```
 
-```python3 test-runner.py```
-
-## Get LOC for Codebases
-Run the following command to get the LOC for each project.
-
-```python3 line-counter.py```
+```python3 test-runner.py -p ./emcc-build/fmt```
