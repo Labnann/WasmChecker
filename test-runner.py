@@ -486,7 +486,6 @@ if __name__ == "__main__":
                     build_codebase_in_WebAssembly(wasm_branch, timeout)
                     print("I added tests and built the codebase again")
                 else:
-                    print("Here")
                     log_file = "Testing/Temporary/LastTest.log"
                     error, file_content = read_file(log_file)
                     check_exit_with_error(error, file_content)
