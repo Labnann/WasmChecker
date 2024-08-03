@@ -44,11 +44,11 @@ print(f"{green_text}{(N+2) * '*'}{reset_text}")
 print(df[df['LOC'].isna()]['project'])
 
 print("=" * ((N - len("Executable Tests"))//2), "Executable Tests", "=" * ((N - len("Executable Tests"))//2))
-category_loc_sum = df.groupby('category')['#make test'].sum()
+category_loc_sum = df.groupby('category')['#executable tests'].sum()
 print(category_loc_sum)
-print("TOTAL = ", df['#make test'].sum())
+print("TOTAL = ", df['#executable tests'].sum())
 print(f"{green_text}{(N+2) * '*'}{reset_text}")
-print(df[df['#make test'].isna()]['project'])
+print(df[df['#executable tests'].isna()]['project'])
 
 print("=" * ((N - len("Test Cases"))//2), "Test Cases", "=" * ((N - len("Test Cases"))//2))
 category_loc_sum = df.groupby('category')['#test cases'].sum()
@@ -116,7 +116,7 @@ for index, row in df.iterrows():
     t1 = extract_y_value(row['Result of cross-compilation with no change '])
     t2 = extract_y_value(row['Test results for Native binary'])
     t3 = extract_y_value(row['Manually analyzed test results for WebAssembly'])
-    executable_tests = row['#make test']
+    executable_tests = row['#executable tests']
     assert (pd.isna(t3) or (t2 == t3 and t2 == executable_tests and (t1 == t2 or pd.isna(t1))))
 
 print(f"{green_text}{(N+2) * '@'}{reset_text}\n")
@@ -134,13 +134,13 @@ for index, row in df.iterrows():
     else:
         failed_to_be_built_in_wasm += 1
 
-total_executable_for_projects_could_be_built =  df[df['emcc build in wasm'] == "Yes"]['#make test'].sum()
+total_executable_for_projects_could_be_built =  df[df['emcc build in wasm'] == "Yes"]['#executable tests'].sum()
 print("Projects which could be built in wasm successfully: ", df.shape[0] - failed_to_be_built_in_wasm)
 print("For WebAssembly", initial_results_for_wasm, "executabel tests failed out of", total_executable_for_projects_could_be_built, "and", total_executable_for_projects_could_be_built - initial_results_for_wasm, "passed")
 print("For native binary", initial_results_for_native, "executable tests failed out of", total_executable_for_projects_could_be_built, "and", total_executable_for_projects_could_be_built - initial_results_for_native, "passed")
 
 print("Projects which could not be built in wasm successfully: ", failed_to_be_built_in_wasm)
-print("Total number of executable tests for failed projects:", df[df['emcc build in wasm'] == "Build error"]['#make test'].sum())
+print("Total number of executable tests for failed projects:", df[df['emcc build in wasm'] == "Build error"]['#executable tests'].sum())
 
 assert df[df['emcc build in wasm'] == "Build error"].shape == df[df['emcc build in wasm'] != "Yes"].shape
 
@@ -167,15 +167,15 @@ for res in wasmchecker_results:
 total_tests_for_projects_wasmchecker_could_not_build = 0
 for index, row in df.iterrows():
     if row['Can WasmChecker build the project? what is the result of differential testing?'].split('-')[0].strip() == "N":
-        total_tests_for_projects_wasmchecker_could_not_build += int(row['#make test'])
+        total_tests_for_projects_wasmchecker_could_not_build += int(row['#executable tests'])
 
 print("=" * ((N - len("WasmChecker Effectiveness"))//2), f"{red_text}WasmChecker Effectiveness {reset_text}", "=" * ((N - len("WasmChecker Effectiveness"))//2))
 
 print("Total number of projects that WasmChecker could build: ", total_projects_wasmchecker_could_build, "out of", 
       df.shape[0], "or", np.round(total_projects_wasmchecker_could_build*100/df.shape[0]),"%")
 
-print("Total number of build errors that WasmChecker could resolve:", df['How many build errors is addressed by WasmChecker'].sum(), "out of", 
-      df['How many build challenges?'].sum(), "or", np.round(df['How many build errors is addressed by WasmChecker'].sum()*100/df['How many build challenges?'].sum()), "%")
+print("Total number of build errors that WasmChecker could resolve:", df['How many build errors are addressed by WasmChecker'].sum(), "out of", 
+      df['How many build challenges?'].sum(), "or", np.round(df['How many build errors are addressed by WasmChecker'].sum()*100/df['How many build challenges?'].sum()), "%")
 
 total_tests = 0
 manual_analysis = df[~df['Manually analyzed test results for WebAssembly'].isna()]['Manually analyzed test results for WebAssembly'].tolist()
