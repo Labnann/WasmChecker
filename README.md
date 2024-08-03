@@ -50,4 +50,13 @@ python3 WasmChecker.py -u https://github.com/fmtlib/fmt -t FMT_TEST
 
 ```python3 build-codebases.py compiler(i.e., clang/gcc/emcc)```
 
-```python3 test-runner.py -p ./emcc-build/fmt```
+```
+python3 test-runner.py -p ./emcc-build/fmt
+```
+
+## Reproducing The Paper Results
+Using the dataset.csv and the script results.py, you can simply reproduce our results.
+```
+python3 results.py
+```
+
