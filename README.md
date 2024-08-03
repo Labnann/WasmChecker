@@ -25,7 +25,7 @@ $ tar -xzf codeql-bundle-linux64.tar.gz
 $ export PATH=$PATH:/path/to/codeql
 $ codeql resolve qlpacks
 ```
-Note: You can also use WasmChecker without using CodeQL as the static analyzer. In this case, the WasmChecker simply enables the most important flags. This may cause options conflicts and compile-time overhead. Also the result of differential testing might be less accurate. 
+Note: You can also use WasmChecker without using CodeQL as the static analyzer. In this case, the WasmChecker simply enables the most important flags. This may cause options conflicts and compile-time overhead. Also, the result of differential testing might be less accurate. 
 
 ## How to Use WasmChecker
 You can use WasmChecker in two ways. If you are going to test a codebase that is already in your system, simply use the following command:
