@@ -59,4 +59,3 @@ Using the dataset.csv and the script results.py, you can simply reproduce our re
 ```
 python3 results.py
 ```
-
