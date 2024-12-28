@@ -61,7 +61,7 @@ python3 results.py
 ```
 
 ## :lady_beetle: Reported Bugs
-This is the list of 11 new bugs that we found in Emscripten compiler toolchain by using WasmChecker:
+This is the list of new bugs we found in Emscripten compiler toolchain by using WasmChecker:
 - https://github.com/emscripten-core/emscripten/issues/21382
 - https://github.com/emscripten-core/emscripten/issues/21603
 - https://github.com/emscripten-core/emscripten/issues/22014
