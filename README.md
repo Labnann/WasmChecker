@@ -70,7 +70,7 @@ This is the list of new bugs we found in Emscripten compiler toolchain by using 
 - https://github.com/emscripten-core/emscripten/issues/22033
 - https://github.com/emscripten-core/emscripten/issues/22030
 - https://github.com/emscripten-core/emscripten/issues/22202
-- https://github.com/emscripten-core/emscripten/pull/21193
+- !https://github.com/emscripten-core/emscripten/pull/21193
 
 ## :mailbox_with_mail: Feedback
 
