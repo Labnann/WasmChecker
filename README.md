@@ -60,7 +60,7 @@ Using the dataset.csv and the script results.py, you can simply reproduce our re
 python3 results.py
 ```
 
-## Bugs 
+## Reported Bugs
 This is the list of 11 new bugs that we found in Emscripten compiler toolchain by using WasmChecker:
 - https://github.com/emscripten-core/emscripten/issues/21382
 - https://github.com/emscripten-core/emscripten/issues/21603
