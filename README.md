@@ -68,6 +68,9 @@ This is the list of 11 new bugs that we found in Emscripten compiler toolchain b
 - https://github.com/emscripten-core/emscripten/issues/22259
 - https://github.com/emscripten-core/emscripten/issues/21604
 - https://github.com/emscripten-core/emscripten/issues/22050
+- https://github.com/emscripten-core/emscripten/issues/22040
+- https://github.com/emscripten-core/emscripten/issues/22033
+- https://github.com/emscripten-core/emscripten/issues/22030
 
 
 
