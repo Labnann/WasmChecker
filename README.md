@@ -48,9 +48,8 @@ python3 WasmChecker.py -u https://github.com/fmtlib/fmt -t FMT_TEST
 
 ## Build and Test Codebases with the Default Settings of Emscripten
 
-```python3 build-codebases.py compiler(i.e., clang/gcc/emcc)```
-
 ```
+python3 build-codebases.py compiler(i.e., clang/gcc/emcc)
 python3 test-runner.py -p ./emcc-build/fmt
 ```
 
