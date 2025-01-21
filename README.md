@@ -1,6 +1,6 @@
 # WasmChecker
 A differential testing framework comparing semantics equivalency of a C/C++ code in a native binary (e.g., x86-64) and WebAssembly using a test-driven approach.
-For more information, see the paper ["Reusing Legacy Code in WebAssembly: Key Challenges of Cross-Compilation and Code Semantics Preservation"](https://arxiv.org/abs/2412.20258)
+For more information, see the paper ["Reusing Legacy Code in WebAssembly: Key Challenges of Cross-Compilation and Code Semantics Preservation"](https://arxiv.org/abs/2412.20258).
 
 ## Requirements
 - Python3
